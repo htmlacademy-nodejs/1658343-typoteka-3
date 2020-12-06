@@ -1,10 +1,14 @@
 "use strict";
 const chalk = require(`chalk`);
 const fs = require(`fs`).promises;
-const {shuffle, getRandomInt} = require(`../../utils`);
+const { shuffle, getRandomInt } = require(`../../utils`);
 
 const FILE_NAME = `mocks.json`;
 const DEFAULT_COUNT = 1;
+const ExitCode = {
+  success: 0,
+  error: 1,
+};
 
 const TITLES = [
   `Ёлки. История деревьев`,
@@ -99,6 +103,13 @@ const generateOffers = (count) => {
 module.exports = {
   name: `--generate`,
   run: async (count) => {
+
+  
+    if (+count > 1000) {
+      console.error(chalk.red(`Не больше 1000 публикаций`));
+      return process.exit(ExitCode.error);
+    }
+
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
     const content = JSON.stringify(generateOffers(countOffer), null, 4);
 
